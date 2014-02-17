@@ -32,7 +32,7 @@ class Vinter implements \ArrayAccess {
             $result[$t] = self::$instances[$echo][$t];
         }
 
-        return is_array($name) 
+        return is_array($name)
             ? $result
             : array_pop($result); // the only element
     }
@@ -42,7 +42,7 @@ class Vinter implements \ArrayAccess {
         $this->echo = $echo;
     }
 
-    private static function tags($echo=false) {
+    private static function loaded_tags($echo=false) {
         return self::$instances[$echo];
     }
 
@@ -141,39 +141,25 @@ class Vinter implements \ArrayAccess {
         $i = 0;
         $result = '';
 
-        $callback = self::copyClosureUse($callback);
+        $callback = self::injected($callback);
         foreach ($sources as $k => $s) {
             $r = $callback($s, $k, $i);
 
-            //todo
-            if (is_array($r)) {
-                foreach ($r as $l) {
-                    if ($l instanceof Vinter) {
-                        $result .= $l();
-                    } else {
-                        $result .= $l;
-                    }
-                }
-            } else {
-                $result .= $r;
-            }
+            $result .= $r;
             $i++;
         }
 
         return $result;
     }
 
-    private static function copyClosureUse($closure) {
+    private static function injected($closure) {
         $func = new \ReflectionFunction($closure);
         $filename = $func->getFileName();
         $start_line = $func->getStartLine() - 1; // it's actually - 1, otherwise you wont get the function() block
         $end_line = $func->getEndLine();
         $length = $end_line - $start_line;
 
-        $source = file($filename);
-        $lines = implode("", array_slice($source, $start_line, $length));
-
-        $lines = "<?php " . $lines;
+        $lines = '<?php ' . implode('', array_slice(file($filename), $start_line, $length));
 
         $args = $uses = $fbody = '';
 
@@ -198,32 +184,27 @@ class Vinter implements \ArrayAccess {
             }, $collects));
         });
 
-        $original_uses = $func->getStaticVariables();
-
-        $tags = self::tags($echo=true);
-        $comma_uses = implode(', ', array_map(function($t) {
-            return '$' . $t;
-        }, array_keys($tags)));
-
-        if ($original_uses) {
-            $comma_uses .= ', ' . implode(', ', array_map(function($t) {
-                return '$' . $t;
-            }, array_keys($original_uses)));
-        }
+        $inner_uses = $func->getStaticVariables();
 
         $_ = function(/*arguments*/) {
             return call_user_func_array('\Vinter\Vinter::_', func_get_args());
         };
-        $comma_uses .= ', $_';
+
+        $loaded_tags = self::loaded_tags($echo=true);
+
+        // all injected variables, comma separated
+        $injected_uses = '$_, ' . implode(', ', array_map(function($t) {
+            return '$' . $t;
+        }, array_merge(array_keys($loaded_tags), array_keys($inner_uses))));
 
         // todo: variable name conflict
-        return call_user_func(function() use ($original_uses, $tags, $args, $comma_uses, $fbody, $_) {
+        return call_user_func(function() use ($inner_uses, $loaded_tags, $args, $injected_uses, $fbody, $_) {
 
-            extract($original_uses);
-            extract($tags);
+            extract($inner_uses);
+            extract($loaded_tags);
 
             eval("\$decorated =
-                function ($args) use ($comma_uses) {
+                function ($args) use ($injected_uses) {
                     ob_start();
                     $fbody;
                     return ob_get_clean();

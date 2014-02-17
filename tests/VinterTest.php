@@ -26,13 +26,14 @@ class VinterTest extends PHPUnit_Framework_TestCase {
 
 		// each
 		$sources = array('a', 'b', 'c');
+		$row_class = 'z';
 		$this->assertEquals(
 			$table(
-				V::each($sources, function($class) {
-					$tr[".$class"]();
+				V::each($sources, function($class) use ($row_class) {
+					$tr[".$row_class"][".$class"]();
 				})
 			),
-			'<table><tr class="a"></tr><tr class="b"></tr><tr class="c"></tr></table>'
+			'<table><tr class="z a"></tr><tr class="z b"></tr><tr class="z c"></tr></table>'
 		);
 
 
