@@ -3,6 +3,11 @@ Vinter
 
 Very INTEResting (and tricky) php template
 
+[![Latest Stable Version](https://poser.pugx.org/vinter/vinter/v/stable.png)](https://packagist.org/packages/vinter/vinter)
+[![Build Status](https://travis-ci.org/zealotrunner/Vinter.png?branch=master)](https://travis-ci.org/zealotrunner/Vinter)
+[![Coverage Status](https://coveralls.io/repos/zealotrunner/Vinter/badge.png)](https://coveralls.io/r/zealotrunner/Vinter)
+[![License](https://poser.pugx.org/vinter/vinter/license.png)](https://packagist.org/packages/vinter/vinter)
+
 
 Usage
 -----
