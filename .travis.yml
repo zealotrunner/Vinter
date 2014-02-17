@@ -1,0 +1,23 @@
+language: php
+
+php:
+  - 5.5
+  - 5.4
+  - 5.3
+
+branches:
+  only:
+    - master
+
+install:
+  - curl -sS https://getcomposer.org/installer | php
+  - php composer.phar install --dev --no-interaction
+
+before_script:
+  - mkdir -p build/logs
+
+script: 
+  - ./vendor/bin/phpunit --coverage-clover build/logs/clover.xml tests/VinterTest.php
+
+after_script:
+  - ./vendor/bin/coveralls -v

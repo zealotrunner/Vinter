@@ -137,7 +137,7 @@ class Vinter implements \ArrayAccess {
         }, array());
     }
 
-    public function each($sources, $callback) {
+    public static function each($sources, $callback) {
         $i = 0;
         $result = '';
 
