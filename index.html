@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Vinter by zealotrunner</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Vinter</h1>
+        <h2>Very INTEResting (and tricky) php template</h2>
+        <a href="https://github.com/zealotrunner/Vinter" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="vinter" class="anchor" href="#vinter"><span class="octicon octicon-link"></span></a>Vinter</h1>
+
+<p>Very INTEResting (and tricky) php template</p>
+
+<p><a href="https://packagist.org/packages/vinter/vinter"><img src="https://poser.pugx.org/vinter/vinter/v/stable.png" alt="Latest Stable Version"></a>
+<a href="https://travis-ci.org/zealotrunner/Vinter"><img src="https://travis-ci.org/zealotrunner/Vinter.png?branch=master" alt="Build Status"></a>
+<a href="https://coveralls.io/r/zealotrunner/Vinter"><img src="https://coveralls.io/repos/zealotrunner/Vinter/badge.png" alt="Coverage Status"></a>
+<a href="https://packagist.org/packages/vinter/vinter"><img src="https://poser.pugx.org/vinter/vinter/license.png" alt="License"></a></p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<div class="highlight highlight-php"><pre>
+<span class="o">&lt;?</span><span class="nx">php</span>
+
+<span class="nv">$html</span><span class="p">[</span><span class="s1">'lang=en'</span><span class="p">](</span>
+    <span class="nv">$head</span><span class="p">(</span>
+        <span class="nv">$title</span><span class="p">(</span><span class="nv">$page_title</span><span class="p">)</span>
+    <span class="p">),</span>
+    <span class="nv">$body</span><span class="p">(</span>
+        <span class="nv">$header</span><span class="p">(</span><span class="nv">$h1</span><span class="p">(</span><span class="nv">$page_title</span><span class="p">)),</span>
+        <span class="nv">$nav</span><span class="p">(</span>
+            <span class="nv">$ul</span><span class="p">(</span>
+                <span class="nv">$li</span>              <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'href=#'</span><span class="p">][</span><span class="s1">'.current'</span><span class="p">](</span><span class="s1">'Blog'</span><span class="p">)),</span>
+                <span class="nv">$li</span>              <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'href=#'</span><span class="p">]</span>            <span class="p">(</span><span class="s1">'Archives'</span><span class="p">)),</span>
+                <span class="nv">$li</span>              <span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'href=#'</span><span class="p">]</span>            <span class="p">(</span><span class="s1">'Contact'</span><span class="p">)),</span>
+                <span class="nv">$li</span><span class="p">[</span><span class="s1">'.subscribe'</span><span class="p">](</span><span class="nv">$a</span><span class="p">[</span><span class="s1">'href=#'</span><span class="p">]</span>            <span class="p">(</span><span class="s1">'Subscribe via. RSS'</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+
+        <span class="nv">$section</span><span class="p">[</span><span class="s1">'#comments'</span><span class="p">](</span>
+            <span class="nv">$header</span><span class="p">(</span><span class="nv">$h3</span><span class="p">(</span><span class="s1">'Comments'</span><span class="p">)),</span>
+            <span class="nx">Vinter</span><span class="o">::</span><span class="na">each</span><span class="p">(</span><span class="nv">$comments</span><span class="p">,</span> <span class="k">function</span><span class="p">(</span><span class="nv">$comment</span><span class="p">)</span> <span class="p">{</span><span class="nv">$_</span><span class="p">(</span>
+                <span class="nv">$article</span><span class="p">(</span>
+                    <span class="nv">$header</span><span class="p">(</span>
+                        <span class="nv">$a</span><span class="p">[</span><span class="s2">"href=</span><span class="si">{</span><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">link</span><span class="si">}</span><span class="s2">"</span><span class="p">](</span><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">user</span><span class="p">)</span>
+                    <span class="p">),</span>
+                    <span class="s1">' on '</span><span class="p">,</span>
+                    <span class="nv">$time</span><span class="p">[</span><span class="s2">"datetime=</span><span class="si">{</span><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">datetime</span><span class="si">}</span><span class="s2">"</span><span class="p">](</span><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">time</span><span class="p">)</span>
+                <span class="p">),</span>
+                <span class="nv">$p</span><span class="p">(</span><span class="nv">$comment</span><span class="o">-&gt;</span><span class="na">content</span><span class="p">)</span>
+            <span class="p">);})</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+
+    <span class="nv">$has_footer</span> <span class="o">?</span> <span class="nv">$footer</span><span class="p">(</span><span class="s1">'&amp;copy;Vinter'</span><span class="p">)</span> <span class="o">:</span> <span class="s1">''</span>
+<span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="test" class="anchor" href="#test"><span class="octicon octicon-link"></span></a>Test</h2>
+
+<p>Install <a href="https://github.com/composer/composer">Composer</a></p>
+
+<pre lang="shell"><code>cd vinter
+curl -sS https://getcomposer.org/installer | php
+php composer.phar install --dev
+php composer.phar dumpautoload -o
+</code></pre>
+
+<p>Test</p>
+
+<pre lang="shell"><code>./vendor/bin/phpunit tests/VinterTest.php
+</code></pre>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/zealotrunner/Vinter/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/zealotrunner/Vinter/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/zealotrunner/Vinter"></a> is maintained by <a href="https://github.com/zealotrunner">zealotrunner</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
