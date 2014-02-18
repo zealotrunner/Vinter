@@ -16,7 +16,9 @@ Usage
 
 <?php
 
-$html['lang=en'](
+include('src/load.php');
+
+echo $html['lang=en'](
     $head(
         $title($page_title)
     ),
@@ -44,7 +46,7 @@ $html['lang=en'](
                 $p($comment->content)
             );})
         )
-    )
+    ),
 
     $has_footer ? $footer('&copy;Vinter') : ''
 );

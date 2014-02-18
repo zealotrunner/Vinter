@@ -95,6 +95,11 @@ class Token {
     }
 
     private function matched($nextToken, $endToken) {
+        if ($nextToken == T_CURLY_OPEN) {
+            // T_CORLY_OPEN is also {
+            $nextToken = '{';
+        }
+
         $matches = array(
             ')' => '(',
             '}' => '{'
@@ -102,12 +107,10 @@ class Token {
 
         $matchingToken = $matches[$endToken];
         if ($matchingToken && $nextToken == $matchingToken) {
-            // print 'stack++' . "\n";
             $this->stack++;
         }
 
         if ($matchingToken && $nextToken == $endToken) {
-            // print 'stack--'. "\n";
             $this->stack--;
         }
 

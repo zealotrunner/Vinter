@@ -7,29 +7,22 @@ class Vinter implements \ArrayAccess {
     private static $instances = array();
 
     private $tag;
-    private $echo;
     private $attributes = array();
 
-    public static function i($name, $echo=false) {
+    public static function i($name) {
         $tags = is_array($name)
             ? $name
             : array($name);
 
-        if (empty(self::$instances)) {
-            self::$instances = array(true => array(), false => array());
-        }
-
         $result = array();
         foreach ($tags as $t) {
-            if (empty(self::$instances[$echo][$t])) {
-                $echoing = new self($t, true);
-                $returning = new self($t, false);
+            if (empty(self::$instances[$t])) {
+                $i = new self($t);
 
-                self::$instances[true][$t] = $echoing;
-                self::$instances[false][$t] = $returning;
+                self::$instances[$t] = $i;
             }
 
-            $result[$t] = self::$instances[$echo][$t];
+            $result[$t] = self::$instances[$t];
         }
 
         return is_array($name)
@@ -37,13 +30,12 @@ class Vinter implements \ArrayAccess {
             : array_pop($result); // the only element
     }
 
-    private function __construct($tag, $echo=false) {
+    private function __construct($tag) {
         $this->tag = $tag;
-        $this->echo = $echo;
     }
 
-    private static function loaded_tags($echo=false) {
-        return self::$instances[$echo];
+    private static function loaded_tags() {
+        return self::$instances;
     }
 
     public static function _(/*arguments*/) {
@@ -54,6 +46,7 @@ class Vinter implements \ArrayAccess {
                 : $a;
         }
 
+        echo $r;
         return $r;
     }
 
@@ -62,7 +55,7 @@ class Vinter implements \ArrayAccess {
             $s = $this;
         } else {
             // copy a new Vinter
-            $s = new self($this->tag, $this->echo);
+            $s = new self($this->tag);
         }
 
         foreach ($this->parse($attribute_string) as $name => $value) {
@@ -108,29 +101,7 @@ class Vinter implements \ArrayAccess {
 
         $r = "<{$this->tag}$attr_string>" . implode('', $args) . "</{$this->tag}>";
 
-        if ($this->echo) {
-            echo $r;
-        }
-
         return $r;
-    }
-
-    private function parse($attribute_string) {
-        // #id.class
-        // attr=value
-        preg_match_all('/[#\.]\w+|\w+=\w+/', $attribute_string, $matches);
-        list($segments) = $matches;
-
-        return array_reduce($segments, function($r, $segment) {
-            $segment = str_replace('#', 'id=', $segment);
-            $segment = str_replace('.', 'class=', $segment);
-
-            list($name, $value) = explode('=', $segment);
-
-            $r[$name] = $value;
-
-            return $r;
-        }, array());
     }
 
     public static function each($sources, $callback) {
@@ -146,6 +117,31 @@ class Vinter implements \ArrayAccess {
         }
 
         return $result;
+    }
+
+    // public static function _if($condition, $callback) {
+    //     return $condition
+    //         ? call_user_func(self::injected($callback))
+    //         : '';
+    // }
+
+    private function parse($attribute_string) {
+        // #id.class
+        // attr=value
+        preg_match_all('/[#\.][\w-]+|[\w-]+=[^\s]+/', $attribute_string, $matches);
+        list($segments) = $matches;
+
+        return array_reduce($segments, function($r, $segment) {
+            // expand . and #
+            $segment = preg_replace('/^#/', 'id=', $segment);
+            $segment = preg_replace('/^\./', 'class=', $segment);
+
+            list($name, $value) = explode('=', $segment);
+
+            $r[$name] = $value;
+
+            return $r;
+        }, array());
     }
 
     private static function injected($closure) {
@@ -186,7 +182,7 @@ class Vinter implements \ArrayAccess {
             return call_user_func_array('\Vinter\Vinter::_', func_get_args());
         };
 
-        $loaded_tags = self::loaded_tags($echo=true);
+        $loaded_tags = self::loaded_tags();
 
         // all injected variables, comma separated
         $injected_uses = '$_, ' . implode(', ', array_map(function($t) {
