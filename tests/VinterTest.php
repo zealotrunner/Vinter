@@ -6,7 +6,7 @@ use \Vinter\Vinter as V;
 
 class VinterTest extends PHPUnit_Framework_TestCase {
 
-    public function test_v() {
+    public function test() {
 		include(dirname(__FILE__) . '/../src/load.php');
 
 		// tag
@@ -37,6 +37,7 @@ class VinterTest extends PHPUnit_Framework_TestCase {
 		);
 
 
+		// each
 		$this->assertEquals(
 			V::each($sources, function($id) {$_(
 				$div['#' . $id]($id),
@@ -47,5 +48,22 @@ class VinterTest extends PHPUnit_Framework_TestCase {
 		);
 
     }
+
+    public function testArrayAccess() {
+		include(dirname(__FILE__) . '/../src/load.php');
+
+		// offsetExists
+		$this->assertEquals(
+			isset($div['anything']),
+			true
+		);
+
+		// offsetSet
+		$div['anything'] = 'something';
+
+		// offsetUnset
+		unset($div['anything']);
+
+	}
 }
 

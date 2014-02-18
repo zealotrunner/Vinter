@@ -119,13 +119,9 @@ class Vinter implements \ArrayAccess {
         // #id.class
         // attr=value
         preg_match_all('/[#\.]\w+|\w+=\w+/', $attribute_string, $matches);
-        list($segments) = ($matches);
+        list($segments) = $matches;
 
         return array_reduce($segments, function($r, $segment) {
-            if (!$segment) {
-                $segment = $attribute_string;
-            }
-
             $segment = str_replace('#', 'id=', $segment);
             $segment = str_replace('.', 'class=', $segment);
 
