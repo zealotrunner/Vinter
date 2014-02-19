@@ -7,7 +7,7 @@ use \Vinter\Vinter as V;
 class VinterTest extends PHPUnit_Framework_TestCase {
 
     public function test() {
-        include(dirname(__FILE__) . '/../src/load.php');
+        include(dirname(__FILE__) . '/../src/tags/html5.php');
 
         // tag
         $this->assertEquals(
@@ -50,7 +50,7 @@ class VinterTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testArrayAccess() {
-        include(dirname(__FILE__) . '/../src/load.php');
+        include(dirname(__FILE__) . '/../src/tags/html5.php');
 
         // offsetExists
         $this->assertEquals(
@@ -66,7 +66,7 @@ class VinterTest extends PHPUnit_Framework_TestCase {
     }
 
     public function testReal() {
-        include(dirname(__FILE__) . '/../src/load.php');
+        include(dirname(__FILE__) . '/../src/tags/html5.php');
 
         $page_title = 'title';
         $comment = new stdClass();

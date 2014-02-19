@@ -16,7 +16,7 @@ Usage
 
 <?php
 
-include('src/load.php');
+include('src/tags/html5.php');
 
 echo $html['lang=en'](
     $head(

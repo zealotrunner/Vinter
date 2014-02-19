@@ -2,7 +2,7 @@
 
 namespace Vinter;
 
-// export
+// export html5 tags
 // https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/HTML5_element_list
 
 extract(Vinter::i(array(
